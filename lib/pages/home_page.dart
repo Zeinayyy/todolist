@@ -31,6 +31,8 @@ class _HomePageState extends State<HomePage> {
 
   // text controller
   final _controller = TextEditingController();
+  DateTime date = DateTime.now();
+
 
   // checkbox was tapped
   void checkBoxChanged(bool? value, int index) {
@@ -43,7 +45,7 @@ class _HomePageState extends State<HomePage> {
   // save new task
   void saveNewTask() {
     setState(() {
-      db.toDoList.add([_controller.text, false]);
+      db.toDoList.add([_controller.text, false, date]);
       _controller.clear();
     });
     Navigator.of(context).pop();
@@ -57,6 +59,7 @@ class _HomePageState extends State<HomePage> {
       builder: (context) {
         return DialogBox(
           controller: _controller,
+          date: date,
           onSave: saveNewTask,
           onCancel: () => Navigator.of(context).pop(),
         );
@@ -75,12 +78,14 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.yellow[200],
+      backgroundColor: Color.fromARGB(255, 230, 230, 197),
       appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 209, 191, 191),
         title: Text('TO DO'),
         elevation: 0,
       ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: Color.fromARGB(255, 136, 115, 115),
         onPressed: createNewTask,
         child: Icon(Icons.add),
       ),
@@ -89,6 +94,7 @@ class _HomePageState extends State<HomePage> {
         itemBuilder: (context, index) {
           return ToDoTile(
             taskName: db.toDoList[index][0],
+            date: db.toDoList[index][2],
             taskCompleted: db.toDoList[index][1],
             onChanged: (value) => checkBoxChanged(value, index),
             deleteFunction: (context) => deleteTask(index),
